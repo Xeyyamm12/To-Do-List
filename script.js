@@ -1,132 +1,53 @@
-function orderList() {
-    let items = document.querySelectorAll(".list-added");
-    let order = 1;
-    items.forEach(item => {
-        let content = item.children[0].textContent;
-        item.children[0].textContent = String(order++) + ". " + item.children[0].textContent.substring(item.children[0].textContent.indexOf(".") + 2,item.children[0].textContent.length); 
-    })
-}
+const btn = document.querySelector(".add");
+const inp = document.querySelector("input");
+const cancel = document.querySelector(".cancel");
+const ol = document.querySelector('ol');
+const listTask=document.querySelector('.list-task')
+const inputImg =document.querySelector('.input-img')
+const tasks = [];
 
-function addNewItem (parent,content,add) {
-    let innerHtmlItem = "<p></p>\n<img src=\"/img/cancel.png\" alt=\"cancel\" class=\"cancel\">";
-    let item = document.createElement("div");
-    item.classList.add("list-added");
-    item.classList.add("list-item");
-    item.innerHTML = innerHtmlItem;
-    let contentElement = item.children[0];
-    contentElement.textContent = ". " + content;
-    item.children[1].addEventListener("mouseover", event => {
-            event.target.src = "img/cancelfull.png"
-    })
-    item.children[1].addEventListener("mouseleave", event => {
-        event.target.src = "/img/cancel.png"
-    })
-    item.children[1].addEventListener("click", event => {
-        event.target.parentElement.remove();
-        if (getList().length == 0 && document.querySelector(".list-footer").classList.contains("display-none")) {
-            document.querySelector(".list-footer").classList.remove("display-none"); 
-        }
-        orderList();
-    })
-    if (add) {
-        parent.insertBefore(item,parent.children[parent.children.length - 1]);
-        orderList();
-        event.target.value = "";
+btn.addEventListener("click", () => {
+    console.log(inp.value)
+    if (inp.value.trim() === "") {
+      alert("Write something");
     }
-    return item;
-}
-
-function getInputContent() {
-    return document.querySelector(".list-footer input").value;
-}
-
-document.querySelector(".list-footer input").addEventListener("keyup", event => {
-    if (getInputContent().split(" ").length - 1 != getInputContent().length && event.key == "Enter") {
-        addNewItem(document.querySelector(".container").children[3],event.target.value,true);
-        event.target.parentElement.classList.add("display-none");
+    else{
+        listTask.style.display = 'block';
+        const list = document.createElement('li');
+        const p = document.createElement('p');
+        ol.append(list);
+        list.append(p);
+        p.textContent = inp.value.trim();
+        const imgElement = document.createElement("img");
+        list.append(imgElement)
+        list.style.display = 'flex';
+        list.style.justifyContent = 'space-between';
+        list.style.width = '250px'
+        imgElement.src ="/img/cancel.png";
+        imgElement.classList.add("imgelement");
+        tasks.push(list)
+        console.log(tasks)
+        imgElement.addEventListener("mouseover", (event) => {
+          event.target.src ="/img/cancelfull.png";
+        });
+        
+        imgElement.addEventListener("mouseleave", (event) => {
+            event.target.src ="/img/cancel.png";
+          });
+          imgElement.addEventListener("click", ()=>{
+                list.remove();
+          })
+         
     }
+   
 })
-
-document.querySelector(".list-footer img").addEventListener("mouseover", event => {
-    event.target.src = "/img/cancelfull.png"
-})
-
-document.querySelector(".list-footer img").addEventListener("mouseleave", event => {
-    event.target.src = "/img/cancel.png"
-})
-
-document.querySelector(".list-footer img").addEventListener("click", event => {
-    event.target.parentElement.children[0].value = "";
-})
-
-document.querySelector(".add-button").addEventListener("click", event => {
-    let listFooter = document.querySelector(".list-footer");
-    let input = listFooter.children[0];
-    let isDisplayNone = listFooter.classList.contains("display-none");
-    if (isDisplayNone) {
-        listFooter.classList.remove("display-none")
-    }
-    else if (input.value.split(" ").length - 1 != input.value.length) {
-        addNewItem(document.querySelector(".container").children[3],input.value,true);
-        input.parentElement.classList.add("display-none");
-        input.value = "";
-    }
-})
-
-function getList() {
-    let rtr = [];
-
-    document.querySelectorAll(".list-added").forEach(item => {
-        rtr.push(item.children[0].textContent.substring(item.children[0].textContent.indexOf(".") + 2,item.children[0].textContent.length));
-    })
-    return rtr;
-}
-
-function getSortedList() {
-    let rtr = []; 
-    return getList().sort();
-}
-
-function getSortedReversedList() {
-    return getSortedList().reverse();
-}
-
-document.querySelector(".sort img").addEventListener("mouseover", event => {
-    if (event.target.classList.contains("reverse")) {
-        event.target.src = "/img/down.png";
-    }
-    else {
-        event.target.src = "/img/solid down.png";
-    }
-    
-})
-
-document.querySelector(".sort img").addEventListener("mouseleave", event => {
-    if (event.target.classList.contains("reverse")) {
-        event.target.src = "/img/up.png";
-    }
-    else {
-        event.target.src = "img/down.png";
-    }
-})
-
-document.querySelector(".sort img").addEventListener("click", event => {
-    let arrray;
-    if (event.target.classList.contains("reverse")) {
-        event.target.src = "/img/solid down.png";
-        arrray  = getSortedReversedList();
-        event.target.classList.remove("reverse");
-    }
-    else {
-        event.target.src = "/img/solid up.png";
-        arrray = getSortedList();
-        event.target.classList.add("reverse");
-    }
-    document.querySelectorAll(".list-added").forEach(item => {
-        item.remove();
-    })
-    arrray.forEach(item => {
-        addNewItem(document.querySelector(".container").children[3],item,true);
-    })
-    orderList();
-})
+inputImg.addEventListener("click", ()=>{
+    inp.value= " ";
+  })
+  inputImg.addEventListener("mouseover", (event) => {
+    event.target.src ="/img/cancelfull.png";
+  });
+  
+  inputImg.addEventListener("mouseleave", (event) => {
+      event.target.src ="/img/cancel.png";
+    });

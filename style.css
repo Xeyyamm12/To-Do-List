@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
-
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +7,7 @@
 
 
 body {
-    font-family: 'Sometype Mono', monospace;
+    font-family: Roboto;
 }
 
 main {
@@ -124,8 +123,21 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .display-none {
-        display: none;
+        display:none;
+}
+.list-task{
+    display: none;
+}
+ol{
+    list-style: none;
+    width: 265px;
+    margin-left: 15px;
+}
+li{
+    padding-left: 10px;
+    padding: 5px;
 }
