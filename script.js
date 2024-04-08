@@ -1,67 +1,132 @@
-let btn = document.querySelector('button');
-let upIcon = document.querySelector('i.up');
-let downIcon = document.querySelector('i.down');
-let inputPart = document.querySelector('.card-add-input');
-let listPart = document.querySelector('.card-list');
-let x = document.querySelector('.x');
-let input = document.querySelector('input');
-let span = document.querySelector('span.validation-span');
-let ol = document.querySelector('ol');
-
-let tasks = [];
-let count = 0;
-
-const deleteElement = (id) => {
-    tasks.splice(id, 1);
-    renderList();
+function orderList() {
+    let items = document.querySelectorAll(".list-added");
+    let order = 1;
+    items.forEach(item => {
+        let content = item.children[0].textContent;
+        item.children[0].textContent = String(order++) + ". " + item.children[0].textContent.substring(item.children[0].textContent.indexOf(".") + 2,item.children[0].textContent.length); 
+    })
 }
 
-const inputListChanger = (e) => {
-    
-    e.preventDefault();
-    if ( input.value.trim().length  ) {
-        tasks.push(input.value.trim());
-        renderList();
-        input.value = '';
-    } else {       
-        input.value = '';
-     
-        span.style.display = 'block';
+function addNewItem (parent,content,add) {
+    let innerHtmlItem = "<p></p>\n<img src=\"/img/cancel.png\" alt=\"cancel\" class=\"cancel\">";
+    let item = document.createElement("div");
+    item.classList.add("list-added");
+    item.classList.add("list-item");
+    item.innerHTML = innerHtmlItem;
+    let contentElement = item.children[0];
+    contentElement.textContent = ". " + content;
+    item.children[1].addEventListener("mouseover", event => {
+            event.target.src = "img/cancelfull.png"
+    })
+    item.children[1].addEventListener("mouseleave", event => {
+        event.target.src = "/img/cancel.png"
+    })
+    item.children[1].addEventListener("click", event => {
+        event.target.parentElement.remove();
+        if (getList().length == 0 && document.querySelector(".list-footer").classList.contains("display-none")) {
+            document.querySelector(".list-footer").classList.remove("display-none"); 
+        }
+        orderList();
+    })
+    if (add) {
+        parent.insertBefore(item,parent.children[parent.children.length - 1]);
+        orderList();
+        event.target.value = "";
     }
-
-    inputPart.classList.toggle('d-none');
-    listPart.classList.remove('d-none');
+    return item;
 }
 
-const renderList = () => {
-
-    ol.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-        ol.innerHTML += `
-            <li>
-                <span class='task-inner'>${index+1}.${ task}</span>
-             
-              <div class='icon'>  <i class="fa-regular fa-circle-xmark delete-btn" onclick="deleteElement(${index})"></i></div>
-            </li>`;
-    });
+function getInputContent() {
+    return document.querySelector(".list-footer input").value;
 }
 
-const clearInputValue = () => {
-    input.value = '';
+document.querySelector(".list-footer input").addEventListener("keyup", event => {
+    if (getInputContent().split(" ").length - 1 != getInputContent().length && event.key == "Enter") {
+        addNewItem(document.querySelector(".container").children[3],event.target.value,true);
+        event.target.parentElement.classList.add("display-none");
+    }
+})
+
+document.querySelector(".list-footer img").addEventListener("mouseover", event => {
+    event.target.src = "/img/cancelfull.png"
+})
+
+document.querySelector(".list-footer img").addEventListener("mouseleave", event => {
+    event.target.src = "/img/cancel.png"
+})
+
+document.querySelector(".list-footer img").addEventListener("click", event => {
+    event.target.parentElement.children[0].value = "";
+})
+
+document.querySelector(".add-button").addEventListener("click", event => {
+    let listFooter = document.querySelector(".list-footer");
+    let input = listFooter.children[0];
+    let isDisplayNone = listFooter.classList.contains("display-none");
+    if (isDisplayNone) {
+        listFooter.classList.remove("display-none")
+    }
+    else if (input.value.split(" ").length - 1 != input.value.length) {
+        addNewItem(document.querySelector(".container").children[3],input.value,true);
+        input.parentElement.classList.add("display-none");
+        input.value = "";
+    }
+})
+
+function getList() {
+    let rtr = [];
+
+    document.querySelectorAll(".list-added").forEach(item => {
+        rtr.push(item.children[0].textContent.substring(item.children[0].textContent.indexOf(".") + 2,item.children[0].textContent.length));
+    })
+    return rtr;
 }
 
-const filterAZ = () => {
-    tasks.sort();
-    renderList();
+function getSortedList() {
+    let rtr = []; 
+    return getList().sort();
 }
 
-const filterZA = () => {
-    tasks.sort((a, b) => b.localeCompare(a));
-    renderList();
+function getSortedReversedList() {
+    return getSortedList().reverse();
 }
 
-btn.addEventListener('click', inputListChanger);
-upIcon.addEventListener('click', filterZA);
-downIcon.addEventListener('click', filterAZ);
-x.addEventListener('click', clearInputValue);
+document.querySelector(".sort img").addEventListener("mouseover", event => {
+    if (event.target.classList.contains("reverse")) {
+        event.target.src = "/img/down.png";
+    }
+    else {
+        event.target.src = "/img/solid down.png";
+    }
+    
+})
+
+document.querySelector(".sort img").addEventListener("mouseleave", event => {
+    if (event.target.classList.contains("reverse")) {
+        event.target.src = "/img/up.png";
+    }
+    else {
+        event.target.src = "img/down.png";
+    }
+})
+
+document.querySelector(".sort img").addEventListener("click", event => {
+    let arrray;
+    if (event.target.classList.contains("reverse")) {
+        event.target.src = "/img/solid down.png";
+        arrray  = getSortedReversedList();
+        event.target.classList.remove("reverse");
+    }
+    else {
+        event.target.src = "/img/solid up.png";
+        arrray = getSortedList();
+        event.target.classList.add("reverse");
+    }
+    document.querySelectorAll(".list-added").forEach(item => {
+        item.remove();
+    })
+    arrray.forEach(item => {
+        addNewItem(document.querySelector(".container").children[3],item,true);
+    })
+    orderList();
+})
