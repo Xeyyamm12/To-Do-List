@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>To Do</title>
+ <link rel="stylesheet" href="style.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>To-Do-List</title>
 </head>
 <body>
-    <main>
-        <div class="all">
-            <div class="head"></div>
-            <h1>To-Do List</h1>
-            <div class="icon-sort">
-                <button class="sort">
-                    <img src="/img/down.png" alt="sort">
-                </button>
-            </div>
-            <div class="list">
-                <div class="task-list">
-                    <input class="write" type="text">
-                    <img class="cancel1" src="/img/cancel.png" alt="cancel1 ">
-                    <img class="cancel2" src="/img/cancelfull.png" alt="cancel2 ">
-                </div>
-            </div>
-            <div class="add">
-                <button class="add-button">
-                    Add
-                </button>
-            </div>
+  <div class="all-task">
+    <div class="card">
+        <div class="default"></div>
+        <h1>To-Do List</h1>
+        <div class="card-info card-context card-add-input ">
+            <form action="" >
+            <div class="input">
+                <input type="text" placeholder="Add Task..." >
+                <i class="fa-regular x fa-circle-xmark"></i>  
+          
+            </div>  
+            </form>
         </div>
-    </main>
-    <script src="script.js"></script>
+    <div class="card-info card-context card-list d-none">
+     <div class="filter">   <i class="fa-solid fa-arrow-down-a-z down"></i>
+        <i class="fa-solid fa-arrow-up-z-a up"></i></div>
+         
+        <div class="list">
+                <ol>
+                    <span style="color: red;" class="validation-span d-none">Düzgün daxil edin!!!</span>
+ 
+            </ol>
+       
+        </div>
+       
+    </div>
+ 
+        </div>
+        <button class="btn" type="submit">+ Add
+
+        </button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
