@@ -136,8 +136,15 @@ ol{
     list-style: none;
     width: 265px;
     margin-left: 15px;
+    
 }
 li{
     padding-left: 10px;
     padding: 5px;
+}
+.boxShadow{
+    box-shadow: 8px 8px 32px #e1e1e1;
+  }
+.drag{
+    opacity: 0;
 }
